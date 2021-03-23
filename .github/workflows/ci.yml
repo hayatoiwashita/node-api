@@ -32,12 +32,14 @@ jobs:
     - uses: hayatoiwashita/dependency-check-action@master
       with:
         Project-Name: ${PROJECT_NAME}
-    - name: Archive reports
-      uses: actions/upload-artifact@v2
-      with:
-        name: dist
-        path: |
-          dist
+
+  dast_with_owasp-zap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ZAP Scan
+        uses: zaproxy/action-baseline@v0.4.0
+        with:
+          target: 'https://www.zaproxy.org'
 
   container_scan_with_trivy:
     runs-on: ubuntu-latest
