@@ -1,0 +1,38 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Vulnerability scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  IMAGE_NAME: mhart/alpine-node:7.10.1
+  GITHUB_USER: homoluctus
+
+jobs:
+  scan:
+    name: Scan images
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+        with:
+          ref: master
+
+      - name: Install commands
+        run: |
+          sudo apt install apt-transport-https gnupg
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -cs) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+          sudo apt update
+          sudo apt install --no-install-recommends trivy
+
+      - name: Pull images
+        run: docker pull ${IMAGE_NAME}
+
+      - name: Scan Image
+        run: trivy -q --severity HIGH,CRITICAL --exit-code 1 ${IMAGE_NAME} > tmp.txt
+
