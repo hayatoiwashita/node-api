@@ -5,22 +5,31 @@ name: Vulnerability scan
 
 on:
   push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
 env:
   IMAGE_NAME: mhart/alpine-node:7.10.1
-  GITHUB_USER: homoluctus
 
 jobs:
+  sonarcloud:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   scan:
     name: Scan images
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@master
-        with:
-          ref: master
+      - uses: actions/checkout@v2
 
       - name: Install commands
         run: |
@@ -34,5 +43,5 @@ jobs:
         run: docker pull ${IMAGE_NAME}
 
       - name: Scan Image
-        run: trivy -q --severity HIGH,CRITICAL --exit-code 1 ${IMAGE_NAME} > tmp.txt
+        run: trivy -q --severity HIGH,CRITICAL --exit-code 1 ${IMAGE_NAME}
 
