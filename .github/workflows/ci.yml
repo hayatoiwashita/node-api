@@ -29,7 +29,7 @@ jobs:
   sca_with_owasp-dependency-check:
     runs-on: ubuntu-latest
     steps:
-    - uses: sburris/dependency-check-action@master
+    - uses: hayatoiwashita/dependency-check-action@master
       with:
         Project-Name: ${PROJECT_NAME}
 
