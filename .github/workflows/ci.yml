@@ -32,6 +32,12 @@ jobs:
     - uses: hayatoiwashita/dependency-check-action@master
       with:
         Project-Name: ${PROJECT_NAME}
+    - name: Archive reports
+      uses: actions/upload-artifact@v2
+      with:
+        name: dist
+        path: |
+          dist
 
   container_scan_with_trivy:
     runs-on: ubuntu-latest
