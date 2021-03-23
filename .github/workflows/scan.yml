@@ -18,9 +18,9 @@ jobs:
     name: Scan images
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@develop
+      - uses: actions/checkout@v2
         with:
-          ref: develop
+          ref: master
 
       - name: Install commands
         run: |
