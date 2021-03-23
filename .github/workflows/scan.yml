@@ -5,7 +5,7 @@ name: Vulnerability scan
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
 
@@ -18,7 +18,7 @@ jobs:
     name: Scan images
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@develop
         with:
           ref: master
 
@@ -34,5 +34,5 @@ jobs:
         run: docker pull ${IMAGE_NAME}
 
       - name: Scan Image
-        run: trivy -q --severity HIGH,CRITICAL --exit-code 1 ${IMAGE_NAME} > tmp.txt
+        run: trivy -q --severity HIGH,CRITICAL --exit-code 1 ${IMAGE_NAME}
 
