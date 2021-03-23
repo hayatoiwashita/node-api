@@ -5,15 +5,24 @@ name: Vulnerability scan
 
 on:
   push:
-    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
 
 env:
   IMAGE_NAME: mhart/alpine-node:7.10.1
-  GITHUB_USER: homoluctus
 
 jobs:
+  sonarQubeTrigger:
+    name: SonarQube Trigger
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: SonarQube Scan
+      uses: kitabisa/sonarqube-action@master
+      with:
+        host: ${{ secrets.SONARQUBE_HOST }}
+        login: ${{ secrets.SONARQUBE_TOKEN }}
+
   scan:
     name: Scan images
     runs-on: ubuntu-18.04
