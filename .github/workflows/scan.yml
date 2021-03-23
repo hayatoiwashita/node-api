@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@develop
         with:
-          ref: master
+          ref: develop
 
       - name: Install commands
         run: |
